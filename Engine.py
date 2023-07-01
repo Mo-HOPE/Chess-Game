@@ -10,5 +10,11 @@ class Engine:
              ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
              ]
 
-    def __int__(self):
-        pass
+    def __int__(self, row, col):
+
+        self.row = row
+        self.col = col
+
+    def make_move(self, new_row, new_col):
+        Engine.board[new_row][new_col] = Engine.board[self.row][self.col]
+        Engine.board[self.row][self.col] = "*"
