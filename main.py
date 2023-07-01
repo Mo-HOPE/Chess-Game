@@ -32,21 +32,24 @@ def main():
             if event.type == py.MOUSEBUTTONDOWN:
                 if first_click:
                     x, y = py.mouse.get_pos()
-                    col = x//SQUARE_DI
-                    row = y//SQUARE_DI
+                    col = int(x//SQUARE_DI)
+                    row = int(y//SQUARE_DI)
                     piece = Engine()
-                    piece.row = int(row)
-                    piece.col = int(col)
-                    first_click = False
-                    second_click = True
-                    print("click first time")
-                    continue
+                    piece.row = row
+                    piece.col = col
+                    if Engine.board[row][col] == "*":
+                        continue
+                    else:
+                        first_click = False
+                        second_click = True
+                        print("click first time")
+                        continue
 
                 if second_click:
                     x, y = py.mouse.get_pos()
-                    col = x // SQUARE_DI
-                    row = y // SQUARE_DI
-                    Engine.make_move(piece, int(row), int(col))
+                    col = int(x // SQUARE_DI)
+                    row = int(y // SQUARE_DI)
+                    Engine.make_move(piece, row, col)
                     first_click = True
                     second_click = False
                     print("click second time")
