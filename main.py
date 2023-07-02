@@ -28,8 +28,8 @@ def main():
     piece = Engine()        # create an objet "piece" which represent the piece that user click on
 
     while True:
-        for event in py.event.get():
-            if event.type == py.QUIT:
+        for event in py.event.get():        # check any event happened from user on screen
+            if event.type == py.QUIT:       # if user close the screen then close the program
                 py.quit()
                 exit()
 
@@ -54,7 +54,9 @@ def main():
                     col = int(x//SQUARE_DI)            # get second square col
                     row = int(y//SQUARE_DI)            # get second square row
 
-                    Engine.make_move(piece, row, col)  # give the second square position to make_move method
+                    piece.new_row = row
+                    piece.new_col = col
+                    Engine.make_move(piece)  # give the second square position to make_move method
                     second_click = False               # second click are done
                     first_click = True                 # be ready to the other first clicks
 
