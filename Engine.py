@@ -45,6 +45,9 @@ class Engine:
         if Engine.board[self.row][self.col][1] == "p":
             return self.pawn_move()
 
+        elif Engine.board[self.row][self.col][1] == "R":
+            return self.rock_move()
+
         else:
             return True
 
@@ -97,3 +100,36 @@ class Engine:
                         return True
                     else:
                         return False
+
+    def rock_move(self):
+
+        can_move = True     # flag variable that will allow the rock to move if all squares are empty
+
+        # moving up or down
+        if (self.new_row != self.row) and (self.new_col == self.col):
+            if self.new_row < self.row:                                 # moving up case
+                for i in range(self.new_row+1, self.row):
+                    if Engine.board[i][self.col] != "*":                # check if all squares are empty
+                        can_move = False
+
+            if self.new_row > self.row:                                 # moving down case
+                for i in range(self.row+1, self.new_row):
+                    if Engine.board[i][self.col] != "*":                # check if all squares are empty
+                        can_move = False
+
+        # moving right or left
+        if (self.new_row == self.row) and (self.new_col != self.col):
+            if self.new_col < self.col:                                 # moving left case
+                for i in range(self.new_col+1, self.col):
+                    if Engine.board[self.row][i] != "*":                # check if all squares are empty
+                        can_move = False
+
+            if self.new_col > self.col:                                 # moving right case
+                for i in range(self.col+1, self.new_col):
+                    if Engine.board[self.row][i] != "*":                # check if all squares are empty
+                        can_move = False
+
+        if can_move and (Engine.board[self.new_row][self.new_col][0] != Engine.board[self.row][self.col][0]):
+            return True
+        else:
+            return False
