@@ -4,10 +4,10 @@ class Engine:
              ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
              ["*", "*", "*", "*", "*", "*", "*", "*"],
              ["*", "*", "*", "*", "*", "*", "*", "*"],
-             ["*", "*", "*", "wB", "*", "*", "*", "*"],
              ["*", "*", "*", "*", "*", "*", "*", "*"],
-             ["wp", "*", "wp", "wp", "*", "*", "wp", "wp"],
-             ["*", "wN", "wB", "wQ", "wK", "*", "wN", "wR"]
+             ["*", "*", "*", "*", "*", "*", "*", "*"],
+             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
+             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
              ]
 
     white_turn = True
@@ -54,8 +54,11 @@ class Engine:
         elif Engine.board[self.row][self.col][1] == "Q":
             return self.queen_move()
 
-        else:
-            return True
+        elif Engine.board[self.row][self.col][1] == "N":
+            return self.knight_move()
+
+        elif Engine.board[self.row][self.col][1] == "K":
+            return self.king_move()
 
     def pawn_move(self):
 
@@ -244,3 +247,71 @@ class Engine:
     def queen_move(self):
 
         return self.rock_move() or self.bishop_move()
+
+    def knight_move(self):
+
+        can_move = False  # flag variable that will allow the knight to move if all squares are empty
+
+        if (self.new_row != self.row) and (self.new_col != self.col):               # not moving vertical or horizontal
+
+            if (self.new_row == self.row+1) and (self.new_col == self.col+2):       # moving case 1
+                can_move = True
+
+            elif (self.new_row == self.row+1) and (self.new_col == self.col-2):     # moving case 2
+                can_move = True
+
+            elif (self.new_row == self.row+2) and (self.new_col == self.col+1):     # moving case 3
+                can_move = True
+
+            elif (self.new_row == self.row+2) and (self.new_col == self.col-1):     # moving case 4
+                can_move = True
+
+            elif (self.new_row == self.row-1) and (self.new_col == self.col+2):     # moving case 5
+                can_move = True
+
+            elif (self.new_row == self.row-1) and (self.new_col == self.col-2):     # moving case 6
+                can_move = True
+
+            elif (self.new_row == self.row-2) and (self.new_col == self.col+1):     # moving case 7
+                can_move = True
+
+            elif (self.new_row == self.row-2) and (self.new_col == self.col-1):     # moving case 8
+                can_move = True
+
+        if can_move and (Engine.board[self.new_row][self.new_col][0] != Engine.board[self.row][self.col][0]):
+            return True
+        else:
+            return False
+
+    def king_move(self):
+
+        can_move = False  # flag variable that will allow the knight to move if all squares are empty
+
+        if (self.new_row == self.row) and (self.new_col == self.col+1):             # moving case 1
+            can_move = True
+
+        elif (self.new_row == self.row) and (self.new_col == self.col-1):           # moving case 2
+            can_move = True
+
+        elif (self.new_row == self.row+1) and (self.new_col == self.col):           # moving case 3
+            can_move = True
+
+        elif (self.new_row == self.row+1) and (self.new_col == self.col+1):         # moving case 4
+            can_move = True
+
+        elif (self.new_row == self.row+1) and (self.new_col == self.col-1):         # moving case 5
+            can_move = True
+
+        elif (self.new_row == self.row-1) and (self.new_col == self.col):           # moving case 6
+            can_move = True
+
+        elif (self.new_row == self.row-1) and (self.new_col == self.col+1):         # moving case 7
+            can_move = True
+
+        elif (self.new_row == self.row-1) and (self.new_col == self.col-1):         # moving case 8
+            can_move = True
+
+        if can_move and (Engine.board[self.new_row][self.new_col][0] != Engine.board[self.row][self.col][0]):
+            return True
+        else:
+            return False
