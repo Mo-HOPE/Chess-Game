@@ -1,2 +1,2 @@
 # Chess-Game
-Chess game using py game
+Chess game using pygame
