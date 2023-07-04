@@ -4,10 +4,10 @@ class Engine:
              ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
              ["*", "*", "*", "*", "*", "*", "*", "*"],
              ["*", "*", "*", "*", "*", "*", "*", "*"],
+             ["*", "*", "*", "wB", "*", "*", "*", "*"],
              ["*", "*", "*", "*", "*", "*", "*", "*"],
-             ["*", "*", "*", "*", "*", "*", "*", "*"],
-             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
-             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
+             ["wp", "*", "wp", "wp", "*", "*", "wp", "wp"],
+             ["*", "wN", "wB", "wQ", "wK", "*", "wN", "wR"]
              ]
 
     white_turn = True
@@ -47,6 +47,12 @@ class Engine:
 
         elif Engine.board[self.row][self.col][1] == "R":
             return self.rock_move()
+
+        elif Engine.board[self.row][self.col][1] == "B":
+            return self.bishop_move()
+
+        elif Engine.board[self.row][self.col][1] == "Q":
+            return self.queen_move()
 
         else:
             return True
@@ -103,33 +109,138 @@ class Engine:
 
     def rock_move(self):
 
-        can_move = True     # flag variable that will allow the rock to move if all squares are empty
+        can_move = False     # flag variable that will allow the rock to move if all squares are empty
 
         # moving up or down
         if (self.new_row != self.row) and (self.new_col == self.col):
             if self.new_row < self.row:                                 # moving up case
-                for i in range(self.new_row+1, self.row):
-                    if Engine.board[i][self.col] != "*":                # check if all squares are empty
-                        can_move = False
+                if self.new_row == self.row-1:
+                    if Engine.board[self.new_row][self.new_col][0] != Engine.board[self.row][self.col][0]:
+                        can_move = True                                 # move one square
+                else:
+
+                    for i in range(self.new_row+1, self.row):
+                        if Engine.board[i][self.col] == "*":            # check if all squares are empty
+                            can_move = True
+                        else:
+                            can_move = False
+                            break
 
             if self.new_row > self.row:                                 # moving down case
-                for i in range(self.row+1, self.new_row):
-                    if Engine.board[i][self.col] != "*":                # check if all squares are empty
-                        can_move = False
+                if self.new_row == self.row + 1:
+                    if Engine.board[self.new_row][self.new_col][0] != Engine.board[self.row][self.col][0]:
+                        can_move = True                                 # move one square
+                else:
+
+                    for i in range(self.row+1, self.new_row):
+                        if Engine.board[i][self.col] == "*":            # check if all squares are empty
+                            can_move = True
+                        else:
+                            can_move = False
+                            break
 
         # moving right or left
         if (self.new_row == self.row) and (self.new_col != self.col):
             if self.new_col < self.col:                                 # moving left case
-                for i in range(self.new_col+1, self.col):
-                    if Engine.board[self.row][i] != "*":                # check if all squares are empty
-                        can_move = False
+                if self.new_col == self.col - 1:
+                    if Engine.board[self.new_row][self.new_col][0] != Engine.board[self.row][self.col][0]:
+                        can_move = True                                 # move one square
+                else:
+
+                    for i in range(self.new_col+1, self.col):
+                        if Engine.board[self.row][i] == "*":            # check if all squares are empty
+                            can_move = True
+                        else:
+                            can_move = False
+                            break
 
             if self.new_col > self.col:                                 # moving right case
-                for i in range(self.col+1, self.new_col):
-                    if Engine.board[self.row][i] != "*":                # check if all squares are empty
-                        can_move = False
+                if self.new_col == self.col + 1:
+                    if Engine.board[self.new_row][self.new_col][0] != Engine.board[self.row][self.col][0]:
+                        can_move = True                                 # move one square
+                else:
+
+                    for i in range(self.col+1, self.new_col):
+                        if Engine.board[self.row][i] == "*":            # check if all squares are empty
+                            can_move = True
+                        else:
+                            can_move = False
+                            break
 
         if can_move and (Engine.board[self.new_row][self.new_col][0] != Engine.board[self.row][self.col][0]):
             return True
         else:
             return False
+
+    def bishop_move(self):
+
+        can_move = False        # flag variable that will allow the rock to move if all squares are empty
+        checker = 1             # counter that add one to row and col and check if they are empty or not
+
+        if (self.new_row+self.new_col) % 2 == (self.row+self.col) % 2:              # same square color
+            if (self.new_row != self.row) and (self.new_col != self.col):           # not moving vertical or horizontal
+
+                if (self.new_row > self.row) and (self.new_col > self.col):             # moving down-right case
+                    if (self.new_row == self.row+1) and (self.new_col == self.col+1):
+                        if Engine.board[self.new_row][self.new_col][0] != Engine.board[self.row][self.col][0]:
+                            can_move = True                                             # move one square
+                    else:
+                        if self.new_row - self.row == self.new_col - self.col:
+                            for i in range(self.row+1, self.new_row):
+                                if Engine.board[self.row+checker][self.col+checker] == "*":
+                                    can_move = True                                     # check if all squares are empty
+                                    checker += 1
+                                else:
+                                    can_move = False
+                                    break
+
+                elif (self.new_row > self.row) and (self.new_col < self.col):           # moving down-left case
+                    if (self.new_row == self.row + 1) and (self.new_col == self.col - 1):
+                        if Engine.board[self.new_row][self.new_col][0] != Engine.board[self.row][self.col][0]:
+                            can_move = True                                             # move one square
+                    else:
+                        if self.new_row - self.row == self.col - self.new_col:
+                            for i in range(self.row+1, self.new_row):
+                                if Engine.board[self.row+checker][self.col-checker] == "*":
+                                    can_move = True                                     # check if all squares are empty
+                                    checker += 1
+                                else:
+                                    can_move = False
+                                    break
+
+                elif (self.new_row < self.row) and (self.new_col > self.col):           # moving up-right case
+                    if (self.new_row == self.row - 1) and (self.new_col == self.col + 1):
+                        if Engine.board[self.new_row][self.new_col][0] != Engine.board[self.row][self.col][0]:
+                            can_move = True                                             # move one square
+                    else:
+                        if self.row-self.new_row == self.new_col-self.col:
+                            for i in range(self.new_row+1, self.row):
+                                if Engine.board[self.row-checker][self.col+checker] == "*":
+                                    can_move = True                                     # check if all squares are empty
+                                    checker += 1
+                                else:
+                                    can_move = False
+                                    break
+
+                elif (self.new_row < self.row) and (self.new_col < self.col):           # moving up-left case
+                    if (self.new_row == self.row - 1) and (self.new_col == self.col - 1):
+                        if Engine.board[self.new_row][self.new_col][0] != Engine.board[self.row][self.col][0]:
+                            can_move = True                                             # move one square
+                    else:
+                        if self.row - self.new_row == self.col - self.new_col:
+                            for i in range(self.new_row+1, self.row):
+                                if Engine.board[self.row-checker][self.col-checker] == "*":
+                                    can_move = True                                     # check if all squares are empty
+                                    checker += 1
+                                else:
+                                    can_move = False
+                                    break
+
+        if can_move and (Engine.board[self.new_row][self.new_col][0] != Engine.board[self.row][self.col][0]):
+            return True
+        else:
+            return False
+
+    def queen_move(self):
+
+        return self.rock_move() or self.bishop_move()
