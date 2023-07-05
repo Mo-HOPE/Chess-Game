@@ -13,6 +13,7 @@ class Engine:
     white_turn = True
     black_turn = False
     moves_log = []         # store all moves so we can undo later
+    king_under_check = False
 
     def __int__(self, row, col, new_row, new_col):
 
@@ -26,16 +27,20 @@ class Engine:
         if self.valid_moves():
             if Engine.board[self.row][self.col][0] == "w":
                 if Engine.white_turn:
+                    data = (self.row, self.col, self.new_row, self.new_col,
+                            Engine.board[self.row][self.col], Engine.board[self.new_row][self.new_col])
+                    Engine.moves_log.append(data)
                     Engine.board[self.new_row][self.new_col] = Engine.board[self.row][self.col]
-                    Engine.moves_log.append(Engine.board[self.row][self.col])
                     Engine.board[self.row][self.col] = "*"
                     Engine.white_turn = False
                     Engine.black_turn = True
 
             if Engine.board[self.row][self.col][0] == "b":
                 if Engine.black_turn:
+                    data = (self.row, self.col, self.new_row, self.new_col,
+                            Engine.board[self.row][self.col], Engine.board[self.new_row][self.new_col])
+                    Engine.moves_log.append(data)
                     Engine.board[self.new_row][self.new_col] = Engine.board[self.row][self.col]
-                    Engine.moves_log.append(Engine.board[self.row][self.col])
                     Engine.board[self.row][self.col] = "*"
                     Engine.black_turn = False
                     Engine.white_turn = True
@@ -315,3 +320,37 @@ class Engine:
             return True
         else:
             return False
+
+    @classmethod
+    def undo_move(cls):
+
+        if len(Engine.moves_log) == 1:
+            old_row, old_col, new_row, new_col, piece_moved, piece_captured = Engine.moves_log[0]
+            Engine.board[old_row][old_col] = piece_moved
+            Engine.board[new_row][new_col] = piece_captured
+            Engine.moves_log.pop(0)
+
+        if Engine.moves_log:
+            old_row, old_col, new_row, new_col, piece_moved, piece_captured = Engine.moves_log[-1]
+            Engine.board[old_row][old_col] = piece_moved
+            Engine.board[new_row][new_col] = piece_captured
+            Engine.moves_log.pop(-1)
+
+        if Engine.white_turn:
+            Engine.white_turn = False
+            Engine.black_turn = True
+
+        elif Engine.black_turn:
+            Engine.black_turn = False
+            Engine.white_turn = True
+
+    # def under_check(self):
+    #
+    #     king_row = king_col = 0
+    #
+    #     # get king position (row and col)
+    #     for i, row_elements in enumerate(Engine.board):
+    #         for j, col_elements in enumerate(row_elements):
+    #             if col_elements == "wk":
+    #                 king_row = i
+    #                 king_col = j

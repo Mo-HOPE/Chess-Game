@@ -42,12 +42,11 @@ def main():
                     piece.row = row
                     piece.col = col
                     if Engine.board[row][col] == "*":   # if square selected is empty don't do anything
-                        continue
+                        break
                     else:                         # if square selected contain a piece then be ready to the second click
                         first_click = False
                         second_click = True
-                        print("click first time")
-                        continue
+                        break
 
                 if second_click:
                     x, y = py.mouse.get_pos()          # get second square position
@@ -56,12 +55,18 @@ def main():
 
                     piece.new_row = row
                     piece.new_col = col
-                    Engine.make_move(piece)  # give the second square position to make_move method
+                    Engine.make_move(piece)            # give the second square position to make_move method
                     second_click = False               # second click are done
                     first_click = True                 # be ready to the other first clicks
+                    break
 
-                    print("click second time")
-                    continue
+            if event.type == py.KEYDOWN:
+                if event.key == py.K_z or event.key == py.KSCAN_Z:      # if the user press z key then undo move
+                    Engine.undo_move()
+
+                elif event.key == py.K_r or event.key == py.KSCAN_R:    # if the user press r key reset the board
+                    for i in range(len(Engine.moves_log)):
+                        Engine.undo_move()
 
         draw_board()            # draw the chess board with right colors
         draw_pieces()           # draw the pieces on the board
