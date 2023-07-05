@@ -41,9 +41,9 @@ def main():
                     piece = Engine()
                     piece.row = row
                     piece.col = col
-                    if Engine.board[row][col] == "*":   # if square selected is empty don't do anything
+                    if Engine.board[row][col] == "*":  # if square selected is empty don't do anything
                         break
-                    else:                         # if square selected contain a piece then be ready to the second click
+                    else:                              # if not then be ready to the second click
                         first_click = False
                         second_click = True
                         break
