@@ -55,7 +55,8 @@ def main():
 
                     piece.new_row = row
                     piece.new_col = col
-                    Engine.make_move(piece)            # give the second square position to make_move method
+                    piece.make_move()                  # give the second square position to make_move method
+                    piece.under_attack()
                     second_click = False               # second click are done
                     first_click = True                 # be ready to the other first clicks
                     break
